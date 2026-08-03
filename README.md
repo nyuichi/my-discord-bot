@@ -70,10 +70,10 @@ docker compose up --build
 
 ## 4. VPSへ配置する
 
-例としてVPS上の `/opt/demachi-discord-bot` に、`.env` を含めて安全な方法で転送します。`.env` はGitへ入れず、VPS上でも所有者だけが読めるようにします。
+例としてVPS上の `/opt/my-discord-bot` に、`.env` を含めて安全な方法で転送します。`.env` はGitへ入れず、VPS上でも所有者だけが読めるようにします。
 
 ```bash
-cd /opt/demachi-discord-bot
+cd /opt/my-discord-bot
 chmod 600 .env
 docker compose up -d --build
 docker compose ps
@@ -84,30 +84,30 @@ docker compose logs --tail=50 bot
 
 ### Docker権限を付与しないsystemdユーザーサービス
 
-Dockerグループを利用しない場合は、Node.js 22以上をユーザー領域へ導入し、同梱のユーザーサービスを使えます。配置先は `~/apps/demachi-discord-bot`、Node.jsは `~/.local/bin/node` を想定しています。
+Dockerグループを利用しない場合は、Node.js 22以上をユーザー領域へ導入し、同梱のユーザーサービスを使えます。配置先は `~/apps/my-discord-bot`、Node.jsは `~/.local/bin/node` を想定しています。
 
 ```bash
-cd ~/apps/demachi-discord-bot
+cd ~/apps/my-discord-bot
 PATH="$HOME/.local/bin:$PATH" npm ci
 PATH="$HOME/.local/bin:$PATH" npm run check
 PATH="$HOME/.local/bin:$PATH" npm run build
 
 mkdir -p ~/.config/systemd/user
-cp deploy/demachi-discord-bot.service ~/.config/systemd/user/
+cp deploy/my-discord-bot.service ~/.config/systemd/user/
 systemctl --user daemon-reload
-systemctl --user enable --now demachi-discord-bot.service
-systemctl --user status demachi-discord-bot.service
+systemctl --user enable --now my-discord-bot.service
+systemctl --user status my-discord-bot.service
 ```
 
-OS起動後にログインなしで起動するには、そのユーザーでlingeringが有効である必要があります。確認は `loginctl show-user "$USER" -p Linger`、ログは `journalctl --user -u demachi-discord-bot.service` で参照できます。更新時は次を実行します。
+OS起動後にログインなしで起動するには、そのユーザーでlingeringが有効である必要があります。確認は `loginctl show-user "$USER" -p Linger`、ログは `journalctl --user -u my-discord-bot.service` で参照できます。更新時は次を実行します。
 
 ```bash
-cd ~/apps/demachi-discord-bot
+cd ~/apps/my-discord-bot
 git pull --ff-only
 PATH="$HOME/.local/bin:$PATH" npm ci
 PATH="$HOME/.local/bin:$PATH" npm run check
 PATH="$HOME/.local/bin:$PATH" npm run build
-systemctl --user restart demachi-discord-bot.service
+systemctl --user restart my-discord-bot.service
 ```
 
 ## 費用上限
@@ -142,7 +142,7 @@ docker compose logs -f bot
 | 変数 | 既定値 | 用途 |
 |---|---:|---|
 | `OPENAI_MODEL` | `gpt-5.6` | 利用モデル |
-| `OPENAI_REASONING_EFFORT` | `low` | 推論量 |
+| `OPENAI_REASONING_EFFORT` | `medium` | 推論量 |
 | `MONTHLY_BUDGET_USD` | `20` | Bot内の月間推定上限 |
 | `MAX_DAILY_API_CALLS` | `80` | UTC日単位の呼び出し上限 |
 | `MAX_OUTPUT_TOKENS` | `2000` | 返答ごとの生成上限 |

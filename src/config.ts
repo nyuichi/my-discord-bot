@@ -44,7 +44,7 @@ function integerEnv(name: string, fallback: number, min: number, max: number): n
 }
 
 export function loadConfig(): Config {
-  const effort = (process.env.OPENAI_REASONING_EFFORT?.trim() || "low") as ReasoningEffort;
+  const effort = (process.env.OPENAI_REASONING_EFFORT?.trim() || "medium") as ReasoningEffort;
   if (!["none", "low", "medium", "high", "xhigh", "max"].includes(effort)) {
     throw new Error("OPENAI_REASONING_EFFORT is invalid");
   }

@@ -1,7 +1,7 @@
 services:
   bot:
     build: .
-    image: demachi-discord-bot:local
+    image: my-discord-bot:local
     restart: unless-stopped
     init: true
     env_file:

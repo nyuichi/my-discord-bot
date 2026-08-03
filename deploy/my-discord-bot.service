@@ -1,13 +1,14 @@
 [Unit]
-Description=Demachi Discord Bot
+Description=Personal Discord Bot
 Wants=network-online.target
 After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/apps/demachi-discord-bot
+WorkingDirectory=%h/apps/my-discord-bot
 Environment=NODE_ENV=production
-Environment=STATE_FILE=%h/apps/demachi-discord-bot/data/state.json
+Environment=STATE_FILE=%h/apps/my-discord-bot/data/state.json
+Environment=OPENAI_REASONING_EFFORT=medium
 ExecStart=%h/.local/bin/node dist/src/index.js
 Restart=on-failure
 RestartSec=10

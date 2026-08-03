@@ -82,6 +82,34 @@ docker compose logs --tail=50 bot
 
 `restart: unless-stopped` により、プロセス異常終了とVPS再起動後にDockerがBotを再起動します。Docker自体もOS起動時に有効化してください（一般的なLinuxでは `systemctl enable --now docker`）。更新時はファイルを差し替え、同じディレクトリで `docker compose up -d --build` を実行します。
 
+### Docker権限を付与しないsystemdユーザーサービス
+
+Dockerグループを利用しない場合は、Node.js 22以上をユーザー領域へ導入し、同梱のユーザーサービスを使えます。配置先は `~/apps/demachi-discord-bot`、Node.jsは `~/.local/bin/node` を想定しています。
+
+```bash
+cd ~/apps/demachi-discord-bot
+PATH="$HOME/.local/bin:$PATH" npm ci
+PATH="$HOME/.local/bin:$PATH" npm run check
+PATH="$HOME/.local/bin:$PATH" npm run build
+
+mkdir -p ~/.config/systemd/user
+cp deploy/demachi-discord-bot.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now demachi-discord-bot.service
+systemctl --user status demachi-discord-bot.service
+```
+
+OS起動後にログインなしで起動するには、そのユーザーでlingeringが有効である必要があります。確認は `loginctl show-user "$USER" -p Linger`、ログは `journalctl --user -u demachi-discord-bot.service` で参照できます。更新時は次を実行します。
+
+```bash
+cd ~/apps/demachi-discord-bot
+git pull --ff-only
+PATH="$HOME/.local/bin:$PATH" npm ci
+PATH="$HOME/.local/bin:$PATH" npm run check
+PATH="$HOME/.local/bin:$PATH" npm run build
+systemctl --user restart demachi-discord-bot.service
+```
+
 ## 費用上限
 
 既定値は次のとおりです。

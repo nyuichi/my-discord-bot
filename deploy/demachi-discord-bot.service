@@ -1,0 +1,19 @@
+[Unit]
+Description=Demachi Discord Bot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/apps/demachi-discord-bot
+Environment=NODE_ENV=production
+Environment=STATE_FILE=%h/apps/demachi-discord-bot/data/state.json
+ExecStart=%h/.local/bin/node dist/src/index.js
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

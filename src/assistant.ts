@@ -39,7 +39,7 @@ Authoritative facts about this bot implementation:
 - Responses API storage is disabled with store:false. Raw transcripts are not persisted; only compact channel summaries and aggregate usage are saved.
 - The configured maximum output is ${config.maxOutputTokens} tokens and the monthly local budget is $${config.monthlyBudgetUsd}.
 Use these facts directly when asked about the bot. Do not hedge with "it depends on the integration" when the implementation fact above answers the question.
-For cost estimates, distinguish model version from token prices and show the arithmetic. The exact usage of the current response is only known after generation.`;
+For numerical questions, identify what each number and unit means from the conversation before calculating, and show the arithmetic when it helps.`;
 }
 
 function tokenUsage(response: OpenAI.Responses.Response): TokenUsage {

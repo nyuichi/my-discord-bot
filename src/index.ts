@@ -6,7 +6,6 @@ import { BudgetExceededError, CostGuard } from "./cost-guard.js";
 import { recentChannelHistory, stripBotMention } from "./history.js";
 import { hashId, Logger, safeError } from "./logger.js";
 import { StateStore } from "./store.js";
-import { appendApiUsageNote } from "./usage-note.js";
 
 const config = loadConfig();
 const logger = new Logger(config.logLevel);
@@ -77,7 +76,7 @@ async function handleMention(message: Message): Promise<void> {
       recentHistory: history,
       channelSummary: channelState.summary,
     });
-    await sendReply(message, appendApiUsageNote(result.text, question, result.usage, result.costUsd));
+    await sendReply(message, result.text);
     logger.info("mention.replied", {
       channel: channelHash,
       user: userHash,
